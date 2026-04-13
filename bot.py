@@ -14,6 +14,7 @@ from flask import Flask
 import telebot
 from groq import Groq
 from telebot import types
+from dataclasses import dataclass
 
 # --- БЛОК ДЛЯ RENDER (ЧТОБЫ НЕ ВЫКЛЮЧАЛСЯ) ---
 app = Flask('')
