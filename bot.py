@@ -1,3 +1,13 @@
+import threading
+from flask import Flask
+
+app = Flask('')
+@app.route('/')
+def home(): return "ЗОНА РОСТА в сети!"
+
+def run_web():
+    app.run(host='0.0.0.0', port=10000)
+
 import os
 import threading
 from flask import Flask
@@ -589,5 +599,12 @@ def handle_text(message: types.Message) -> None:
 
 
 if __name__ == "__main__":
+    # Запускаем веб-сервер в отдельном потоке для Render
+    threading.Thread(target=run_web, daemon=True).start()
+    
+    print("🚀 Бот запущен и готов к работе")
+    
+    # Твои стандартные функции запуска (не трогаем их)
     prepare_telegram_connection()
     run_bot_forever()
+
