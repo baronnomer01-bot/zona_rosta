@@ -1,22 +1,28 @@
 import os
-import time
-from dataclasses import dataclass
-from typing import Dict, Optional
-
+import threading
+from flask import Flask
 import telebot
 from groq import Groq
 from telebot import types
 
+# --- БЛОК ДЛЯ RENDER (ЧТОБЫ НЕ ВЫКЛЮЧАЛСЯ) ---
+app = Flask('')
+@app.route('/')
+def home():
+    return "ЗОНА РОСТА в сети!"
+
+def run():
+    app.run(host='0.0.0.0', port=10000)
+
+def keep_alive():
+    t = threading.Thread(target=run)
+    t.start()
+# --------------------------------------------
+
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_MODEL = "llama-3.1-70b-versatile"
-RUTUBE_URL = "https://rutube.ru/channel/66854675/"
-
-if not TELEGRAM_TOKEN:
-    raise RuntimeError("Не задана переменная окружения TELEGRAM_TOKEN")
-
-bot = telebot.TeleBot(TELEGRAM_TOKEN, parse_mode="HTML")
-groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
+RUTUBE_URL = "https://rutube.ru"
 
 user_profiles: Dict[int, Dict[str, str]] = {}
 user_steps: Dict[int, str] = {}
